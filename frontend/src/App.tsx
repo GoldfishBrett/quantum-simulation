@@ -8,58 +8,34 @@ import './App.css';
 function App() {
     // Start in the |0> state ('0')
     const [currentState, setCurrentState] = useState<string[]>(['0']);
+    const [quantumVector, setQuantumVector] = useState<number[]>([1, 0]);
 
-    // SIMULATING THE BACKEND LOGIC
-    const getNextStateFromBackend = (action: string, state: string[]): string[] => {
-        console.log(`Sending action to backend: ${action}`);
 
-        // --- TODO: REPLACE THIS LOGIC ---
-        const [current] = state;
-        let newState = current;
+    const getNextStateFromBackend = async (action: string, state: number[]) => {
+        try {
+            const response = await fetch("http://localhost:5000/next-state", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action, state })
+            });
 
-        switch (action) {
-            case 'SET_ZERO':
-                newState = '0';
-                break;
-            case 'SET_ONE':
-                newState = '1';
-                break;
-            case 'H':
-                if (current === '0') newState = '+';
-                else if (current === '1') newState = '-';
-                else if (current === '+') newState = '0';
-                else if (current === '-') newState = '1';
-                break;
-            case 'X':
-                if (current === '0') newState = '1';
-                else if (current === '1') newState = '0';
-                break;
-            case 'Z':
-                if (current === '+') newState = '-';
-                else if (current === '-') newState = '+';
-                break;
-            case 'MEASURE':
-                if (current === '+' || current === '-') {
-                    newState = Math.random() < 0.5 ? '0' : '1';
-                }
-                break;
-            default:
-                break;
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Error communicating with backend:", error);
+            return { newState: state, symbol: "?" };
         }
-// todo: End of replacing -----------------------------------------------------------------------------
-
-        return [newState];
     };
 
-    const handleAction = (action: string) => {
-        // Pass the action and current state to backend
-        const newState = getNextStateFromBackend(action, currentState);
+    const handleAction = async (action: string) => {
+        const { newState, symbol } = await getNextStateFromBackend(action, quantumVector);
+        console.log(`New quantum state: ${newState}, symbol: ${symbol}`);
 
-        // Update the state with what was returned
-        setCurrentState(newState);
+        setQuantumVector(newState);
+        setCurrentState(Array.isArray(symbol) ? symbol : [String(symbol || '?')]);
     };
 
-    // Pass the state to QubitsDisplay
+// Pass the state to QubitsDisplay
     // Pass simple functions to ControlPanel that call handleAction
     return (
         <div className="App">
