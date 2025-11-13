@@ -1,5 +1,5 @@
 import waterImage from '../assets/images/Water_(0).png';
-import iceImage from '../assets/images/ice_(1).png';
+import iceImage from '../assets/images/Ice_(1).png';
 import iceOverWaterImage from '../assets/images/IceWater_(-).png';
 import waterOverIceImage from '../assets/images/WaterIce_(+).png';
 
