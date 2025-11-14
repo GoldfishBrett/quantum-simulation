@@ -6,9 +6,16 @@ import waterOverIceImage from '../assets/images/WaterIce_(+).png';
 
 interface QubitsDisplayProps {
   currentState: any;
+  activeQubit: number;
+  onQubitClick: (index: number) => void;
 }
 
-const QubitsDisplay: React.FC<QubitsDisplayProps> = ({ currentState }) => {
+const QubitsDisplay: React.FC<QubitsDisplayProps> = ({
+                                                       currentState,
+                                                       activeQubit,
+                                                       onQubitClick
+                                                     }) => {
+
   useEffect(() => {
     console.log("QubitsDisplay received:", currentState);
   }, [currentState]);
@@ -31,17 +38,30 @@ const QubitsDisplay: React.FC<QubitsDisplayProps> = ({ currentState }) => {
   }
 
   const renderQubitImage = (state: string, index: number) => {
+    const isSelected = activeQubit === index;
+    const className = isSelected ? "selected" : "";
+
+    const commonProps = {
+      key: index,
+      className: className,
+      onClick: () => onQubitClick(index),
+    };
+
     switch (state) {
       case "0":
-        return <img key={index} src={waterImage} alt="Water" />;
+        return <img {...commonProps} src={waterImage}  alt="Water" />;
       case "1":
-        return <img key={index} src={iceImage} alt="Ice" />;
+        return <img {...commonProps} src={iceImage}  alt="Ice"/>;
       case "+":
-        return <img key={index} src={waterOverIceImage} alt="Water over Ice" />;
+        return <img {...commonProps} src={waterOverIceImage} alt="Water over Ice"/>;
       case "-":
-        return <img key={index} src={iceOverWaterImage} alt="Ice over Water" />;
+        return <img {...commonProps} src={iceOverWaterImage} alt="Ice over Water"/>;
       default:
-        return <div key={index} style={{ width: 250, height: 250, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>?</div>;
+        return (
+            <div {...commonProps} className={`qubit-unknown ${className}`}>
+              ?
+            </div>
+        );
     }
   };
 

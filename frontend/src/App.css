@@ -15,13 +15,45 @@
 .qubits-display {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: 2rem;
     margin-bottom: 2rem;
 }
 
-.qubits-display img {
+.qubits-display img,
+.qubits-display .qubit-unknown {
     width: 250px;
     height: 250px;
+    cursor: pointer;
+    border: 5px solid transparent;
+    border-radius: 16px;
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+}
+
+/* Styling for the "?" state */
+.qubits-display .qubit-unknown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eee;
+    font-size: 5rem;
+    color: #aaa;
+    font-weight: bold;
+}
+
+/* Hover Effect */
+.qubits-display img:hover,
+.qubits-display .qubit-unknown:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Active/Selected State */
+.qubits-display img.selected,
+.qubits-display .qubit-unknown.selected {
+    border-color: #ffcc00; /* Matches your Measure button */
+    box-shadow: 0 0 25px rgba(255, 204, 0, 0.5);
+    transform: scale(1.02);
 }
 
 .control-panel-container {

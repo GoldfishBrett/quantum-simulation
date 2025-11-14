@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
 import QubitsDisplay from './components/QubitsDisplay';
 import ControlPanel from './components/ControlPanel';
@@ -47,8 +47,7 @@ function App() {
                 return { newState: state, symbol: ["?", "?"] };
             }
 
-            const data = await response.json();
-            return data;
+            return await response.json();
         } catch (error) {
             console.error("Error communicating with backend:", error);
             return { newState: state, symbol: ["?", "?"] };
@@ -71,7 +70,7 @@ function App() {
 
         setIsLoading(true);
         // Determine params
-        let params: any = {};
+        let params: any;
         let isMeasurement = false;
 
         if (action === 'CNOT') {
@@ -124,13 +123,12 @@ function App() {
                 <h1>Qubit Simulator</h1>
             </header>
             <main>
-                <QubitsDisplay currentState={currentState} />
+                <QubitsDisplay currentState={currentState} activeQubit={activeQubit} onQubitClick={setActiveQubit}/>
 
                 <ControlPanel
                     isSetDisabled={isGateApplied}
                     isLoading={isLoading}
                     activeQubit={activeQubit}
-                    onSelectQubit={setActiveQubit}
                     onSetZero={() => handleAction('SET_ZERO')}
                     onSetOne={() => handleAction('SET_ONE')}
                     onHadamard={() => handleAction('H')}

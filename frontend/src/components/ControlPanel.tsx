@@ -4,7 +4,6 @@ interface ControlPanelProps {
     isSetDisabled: boolean;
     isLoading?: boolean;
     activeQubit: number;
-    onSelectQubit: (index: number) => void;
     onSetZero: () => void;
     onSetOne: () => void;
     onHadamard: () => void;
@@ -18,7 +17,6 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
     isSetDisabled,
     isLoading = false,
     activeQubit,
-    onSelectQubit,
     onSetZero,
     onSetOne,
     onHadamard,
@@ -31,18 +29,6 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
 
     return (
         <div className="control-panel-container">
-            <div className="qubit-selector">
-                <label>Select Active Qubit:</label>
-                <label>
-                    <input type="radio" name="qubit" checked={activeQubit === 0} onChange={() => onSelectQubit(0)} disabled={globalDisabled}/>
-                    Qubit 1
-                </label>
-                <label>
-                    <input type="radio" name="qubit" checked={activeQubit === 1} onChange={() => onSelectQubit(1)} disabled={globalDisabled}/>
-                    Qubit 2
-                </label>
-            </div>
-
             <div className="control-panel-row">
                 <button onClick={onSetZero} disabled={isSetDisabled || globalDisabled}>
                     Set |0⟩
