@@ -11,10 +11,10 @@ interface QubitsDisplayProps {
 }
 
 const QubitsDisplay: React.FC<QubitsDisplayProps> = ({
-                                                       currentState,
-                                                       activeQubit,
-                                                       onQubitClick
-                                                     }) => {
+  currentState,
+  activeQubit,
+  onQubitClick
+}) => {
 
   useEffect(() => {
     console.log("QubitsDisplay received:", currentState);
@@ -44,28 +44,51 @@ const QubitsDisplay: React.FC<QubitsDisplayProps> = ({
     const commonProps = {
       key: index,
       className: className,
-      onClick: () => onQubitClick(index),
     };
 
     switch (state) {
       case "0":
-        return <img {...commonProps} src={waterImage}  alt="Water" />;
+        return <img {...commonProps} src={waterImage} alt="Water" />;
       case "1":
-        return <img {...commonProps} src={iceImage}  alt="Ice"/>;
+        return <img {...commonProps} src={iceImage} alt="Ice" />;
       case "+":
-        return <img {...commonProps} src={waterOverIceImage} alt="Water over Ice"/>;
+        return <img {...commonProps} src={waterOverIceImage} alt="Water over Ice" />;
       case "-":
-        return <img {...commonProps} src={iceOverWaterImage} alt="Ice over Water"/>;
+        return <img {...commonProps} src={iceOverWaterImage} alt="Ice over Water" />;
       default:
         return (
-            <div {...commonProps} className={`qubit-unknown ${className}`}>
-              ?
-            </div>
+          <div {...commonProps} className={`qubit-unknown ${className}`}>
+            ?
+          </div>
         );
     }
   };
 
-  return <div className="qubits-display">{safeState.map((state, index) => renderQubitImage(state, index))}</div>;
+  return (
+    <div className="qubits-display">
+      {safeState.map((state, index) => (
+        <div key={index} className="qubit-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 10px' }}>
+          <button
+            className={`qubit-label-btn ${activeQubit === index ? 'selected' : ''}`}
+            style={{
+              marginBottom: '10px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              padding: '8px 16px',
+              border: activeQubit === index ? '2px solid #ffcc00' : '1px solid #ccc',
+              borderRadius: '8px',
+              backgroundColor: activeQubit === index ? '#fff8e1' : '#f0f0f0',
+              fontSize: '1rem'
+            }}
+            onClick={() => onQubitClick(index)}
+          >
+            Qubit {index + 1}
+          </button>
+          {renderQubitImage(state, index)}
+        </div>
+      ))}
+    </div>
+  );
 };
 
 export default QubitsDisplay;
