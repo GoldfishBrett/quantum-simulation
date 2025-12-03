@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
 import QubitsDisplay from './components/QubitsDisplay';
 import ControlPanel from './components/ControlPanel';
@@ -123,7 +123,7 @@ function App() {
                 <h1>Qubit Simulator</h1>
             </header>
             <main>
-                <QubitsDisplay currentState={currentState} activeQubit={activeQubit} onQubitClick={setActiveQubit}/>
+                <QubitsDisplay currentState={currentState} activeQubit={activeQubit} onQubitClick={setActiveQubit} />
 
                 <ControlPanel
                     isSetDisabled={isGateApplied}
@@ -135,6 +135,7 @@ function App() {
                     onX={() => handleAction('X')}
                     onZ={() => handleAction('Z')}
                     onCNOT={() => handleAction('CNOT')}
+                    onOracle={() => handleAction('ORACLE')}
                     onMeasure={() => handleAction('MEASURE')}
                 />
             </main>

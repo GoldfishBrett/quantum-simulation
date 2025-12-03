@@ -10,6 +10,7 @@ interface ControlPanelProps {
     onX: () => void;
     onZ: () => void;
     onCNOT: () => void;
+    onOracle: () => void;
     onMeasure: () => void;
 }
 
@@ -23,6 +24,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
     onX,
     onZ,
     onCNOT,
+    onOracle,
     onMeasure
 }) => {
     const globalDisabled = isLoading; // if loading, disable everything to avoid racing
@@ -47,6 +49,9 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
             <div className="control-panel-row">
                 <button onClick={onCNOT} disabled={globalDisabled}>
                     CNOT ({activeQubit === 0 ? 'Q1 → Q2' : 'Q2 → Q1'})
+                </button>
+                <button onClick={onOracle} disabled={globalDisabled}>
+                    Oracle
                 </button>
                 <button onClick={onMeasure} className="measure-button" disabled={globalDisabled}>
                     Measure
