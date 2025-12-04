@@ -319,9 +319,71 @@ app.post('/next-state', (req, res) => {
         }
       }
 
-      default:
-        return respond(currentVec, currentSymbols);
+      case 'ORACLE': {
+        if (typeof qubitIndex !== 'number') {
+          return respond(currentVec, currentSymbols);
+        }
+
+        // Determine control + target
+        const control = qubitIndex;
+        const target  = (qubitIndex === 0 ? 1 : 0);
+
+        // Pick one of the four Deutsch oracle behaviors
+        const choice = Math.floor(Math.random() * 4);
+
+        let v = currentVec;
+
+        // Helper to convert vec back to symbols if product
+        const updateSymbols = () => {
+        const m = matchProduct(v);
+          return m.matched ? m.symbols : ["?", "?"];
+        };
+
+        switch (choice) {
+          // -------------------------------
+          // Constant 0: identity on both
+          // -------------------------------
+          case 0: {
+            // no change
+            const symbols = updateSymbols();
+            return respond(v, symbols);
+          }
+
+          // -------------------------------
+          // Constant 1: X on target qubit
+          // -------------------------------
+          case 1: {
+            v = applySingleQubitGate(v, "X", target);
+            const symbols = updateSymbols();
+            return respond(v, symbols);
+          }
+
+          // -------------------------------
+          // Balanced: CNOT(control→target)
+          // -------------------------------
+          case 2: {
+            v = applyCNOT(v, control, target);
+            const symbols = updateSymbols();
+            return respond(v, symbols);
+          }
+
+          // ---------------------------------------------------------
+          // Balanced: inverted CNOT = X(control) → CNOT → X(control)
+          // ---------------------------------------------------------
+          case 3: {
+            v = applySingleQubitGate(v, "X", control);
+            v = applyCNOT(v, control, target);
+            v = applySingleQubitGate(v, "X", control);
+            const symbols = updateSymbols();
+            return respond(v, symbols);
+          }
+        }
+      }
+
+    default:
+      return respond(currentVec, currentSymbols);
     }
+
   } catch (err) {
     console.error("server error:", err);
     return respond(currentVec, currentSymbols);
